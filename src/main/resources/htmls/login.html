@@ -2,9 +2,764 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>商铺信息</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
 </head>
 <body>
-    <button type="submit">login</button>
+<div id="app">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3
+            px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto font-weight-normal">考试</h5>
+        <form class="form-inline my-2 my-lg-0 mr-5">
+            <div class="input-group timer">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">计时</span>
+                </div>
+                <div class="input-group-append">
+                    <span class="input-group-text" ref="startTimer">00:00</span>
+                </div>
+            </div>
+        </form>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark" href="./index.html">首页</a>
+        </nav>
+        <a v-cloak v-if="logged" class="text-primary" href="./personalCenter.html">{{userInfo.userName}}</a>
+        <a v-else class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#loginBox">登录/注册</a>
+    </div>
+    <div class="container" id="con1" v-if="is_start">
+        <button type="button" class="btn btn-primary btn-lg btn-block" @click="start_ks">START KAOS</button>
+    </div>
+    <div class="container" id="con2" v-else>
+
+        <!--        <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark head-img">-->
+        <!--            <div class="col-md-6 px-0">-->
+        <!--                <h1 class="display-4 font-italic">道路千万条，安全第一条。</h1>-->
+        <!--                <p class="lead my-3">特朗普：我想不通为什么。我想不通，真的。-->
+        <!--                    记者：那你会负责吗？-->
+        <!--                    特朗普：不，我不会。我想不通为什么。</p>-->
+        <!--                <p class="lead mb-0"><a href="#" class="text-white-->
+        <!--                            font-weight-bold">查看详情...</a></p>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary" style="width: 43px">1</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">2</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">3</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">4</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">5</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">6</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">7</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">8</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">9</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">10</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">11</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">12</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">13</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">14</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">15</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">16</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">17</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">18</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">19</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">20</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">21</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">22</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary" style="width: 43px">23</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">24</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">25</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">26</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">27</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">28</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">29</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">30</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">31</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">32</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">33</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">34</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">35</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">36</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">37</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">38</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">39</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">40</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">41</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">42</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">43</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">44</button>
+            </div>
+        </div>
+        <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary" style="width: 43px">45</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">46</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">47</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">48</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">49</button>
+                <button type="button" class="btn btn-secondary" style="width: 43px">50</button>
+            </div>
+        </div>
+
+
+        <fieldset class="form-group pt-5">
+            <div class="row">
+                <div class="col-sm-10">
+                    <legend class="col-form-label ">
+                        <h4>1.
+                            示法撒发所多发奥所发所多发所多付多撒多付所多付所多付撒付所多付多多多多多多多多多多多多多多多多多多多多多多多多多asdasdsssssssssssssssssssssssssssssssssssssss</h4>
+                    </legend>
+                    <div class="form-check pt-4">
+                        <input class="form-check-input" type="radio" name="1" id="11" value="option1"
+                               checked>
+                        <label class="form-check-label" for="11">
+                            123412512552315
+                        </label>
+                    </div>
+                    <div class="form-check pt-4">
+                        <input class="form-check-input" type="radio" name="1" id="12" value="option2">
+                        <label class="form-check-label" for="12">
+                            暗示法撒旦飞洒发售
+                        </label>
+                    </div>
+                    <div class="form-check pt-4">
+                        <input class="form-check-input" type="radio" name="1" id="13" value="option3">
+                        <label class="form-check-label" for="13">
+                            125125124阿斯蒂芬
+                        </label>
+                    </div>
+                    <div class="form-check pt-4">
+                        <input class="form-check-input" type="radio" name="1" id="14" value="option3">
+                        <label class="form-check-label" for="13">
+                            asfsafasgawwgw
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="modal fade" id="loginBox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5><a class="nav-link" :class="{active: isActive}" @click="change_tab"
+                           href="#">登录</a></h5>
+
+                    <h5><a class="nav-link" :class="{active: !isActive}" @click="change_tab"
+                           href="#">注册</a></h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" v-if="isActive">
+                    <form class="form-signin">
+
+                        <div class="form-label-group">
+                            <input type="text" id="loginUserName" class="form-control" placeholder="用户名/电话号码/邮箱"
+                                   required
+                                   autofocus v-model="loginUserName">
+                            <label for="loginUserName">用户名/电话号码/邮箱</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="loginPassword" class="form-control" placeholder="密码"
+                                   required v-model="loginPassword">
+                            <label for="loginPassword">密码</label>
+                        </div>
+
+                        <div class="form-group">
+                            <div><a href="#" @click="forgetPwd">忘记密码？ 找回账号</a></div>
+                        </div>
+
+                        <button class="btn btn-lg btn-primary btn-block" @click="login" :disabled="reging"
+                                type="button">
+                            <span v-if="logining" class="spinner-border spinner-border" role="status"
+                                  aria-hidden="true"></span>
+                            <div v-else>登录</div>
+                        </button>
+                        <small v-if="loginFail" class="form-text text-danger">用户名密码错误</small>
+                        <small v-if="loginSuccess" class="form-text text-success">登录成功</small>
+                        <small v-if="loginErr" class="form-text text-danger">服务器异常</small>
+
+                    </form>
+                </div>
+                <div class="modal-body" v-else>
+                    <form class="form-signin">
+
+                        <div class="form-label-group">
+                            <input type="text" id="regUserName" class="form-control" placeholder="用户名" required
+                                   autofocus v-model="regUserName">
+                            <label for="regUserName">用户名</label>
+                            <small v-if="userNameExist" class="form-text text-danger">用户名已存在</small>
+                            <small v-if="userNameEmpty" class="form-text text-danger">用户名不能为空</small>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="regPassword" class="form-control" placeholder="密码" required
+                                   v-model="regPassword">
+                            <label for="regPassword">密码</label>
+                            <small v-if="passwordEmpty" class="form-text text-danger">密码不能为空</small>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="regPasswordRe" class="form-control" placeholder="再次输入密码" required
+                                   v-model="regPasswordRe">
+                            <label for="regPasswordRe">再次输入密码</label>
+                            <small v-if="passwordMatch" class="form-text text-danger">密码不匹配</small>
+                            <small v-if="passwordReEmpty" class="form-text text-danger">请再次输入密码</small>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="regPhoneNum" class="form-control" placeholder="手机号" required
+                                   v-model="regPhoneNum">
+                            <label for="regPhoneNum">手机号</label>
+                            <small v-if="phoneNumEmpty" class="form-text text-danger">手机号不能为空</small>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="email" id="regEmail" class="form-control" placeholder="邮箱" required
+                                   v-model="regEmail">
+                            <label for="regEmail">邮箱</label>
+                            <small v-if="emailNameEmpty" class="form-text text-danger">邮箱不能为空</small>
+                        </div>
+                        <button class="btn btn-lg btn-info btn-block" @click="register" :disabled="reging"
+                                type="button">
+                            <span v-if="reging" class="spinner-border spinner-border" role="status"
+                                  aria-hidden="true"></span>
+                            <div v-else>注册</div>
+                        </button>
+                        <small v-if="regSucesss" class="form-text text-success">注册成功</small>
+                        <small v-if="regFail" class="form-text text-danger">注册失败</small>
+                        <small v-if="regErr" class="form-text text-danger">服务器异常</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="forgetPwd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">账号找回</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin" v-if="verifySucess">
+
+                        <div class="form-label-group">
+                            <input type="password" id="verifyPassword" class="form-control" placeholder="新的密码" required
+                                   v-model="verifyPassword">
+                            <label for="verifyPassword">新的密码</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="verifyPasswordRe" class="form-control" placeholder="再次输入密码"
+                                   required
+                                   v-model="verifyPasswordRe">
+                            <label for="verifyPasswordRe">再次输入密码</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-success btn-block" @click="verifyUpdate"
+                                type="button">
+                            <span v-if="verifyUpdating" class="spinner-border spinner-border" role="status"
+                                  aria-hidden="true"></span>
+                            <div v-else>提交</div>
+                        </button>
+                    </form>
+                    <form class="form-signin" v-else>
+
+                        <div class="form-label-group">
+                            <input type="text" id="verifyUserName" class="form-control" placeholder="用户名/电话号码/邮箱"
+                                   required
+                                   autofocus v-model="verifyUserName">
+                            <label for="verifyUserName">用户名/电话号码/邮箱</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="text" id="verifyIdentity" class="form-control" placeholder="身份证号" required
+                                   v-model="verifyIdentity">
+                            <label for="verifyIdentity">身份证号</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-secondary btn-block" @click="verifyAcct"
+                                type="button">
+                            <span v-if="verifing" class="spinner-border spinner-border" role="status"
+                                  aria-hidden="true"></span>
+                            <div v-else>验证</div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="text-muted mt-5">
+        <div class="container">
+            <p class="float-right">
+                <a href="#">返回顶部</a>
+            </p>
+            <p> &copy; ks</p>
+        </div>
+    </footer>
+</div>
+
 </body>
 </html>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/0.19.2/axios.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script>
+    var app = new Vue({
+        data: {
+            //主页
+            shopInfo: [],
+            shopInfoBak: [],
+            userInfo: [],
+            logged: false,
+            searchContent: '',
+            filterList: [
+                {name: '不限', isSelected: true, rangeA: 0, rangeB: 9999},
+                {name: '30万以下', isSelected: false, rangeA: 0, rangeB: 30},
+                {name: '30-50万', isSelected: false, rangeA: 30, rangeB: 50},
+                {name: '50-80万', isSelected: false, rangeA: 50, rangeB: 80},
+                {name: '80-120万', isSelected: false, rangeA: 80, rangeB: 120},
+            ],
+            //登录注册
+            isActive: true,
+            loginUserName: '',
+            loginPassword: '',
+            regUserName: '',
+            regPassword: '',
+            regPasswordRe: '',
+            regPhoneNum: '',
+            regEmail: '',
+            userNameExist: false,
+            passwordMatch: false,
+            reging: false,
+            regSucesss: false,
+            regErr: false,
+            userNameEmpty: false,
+            passwordEmpty: false,
+            passwordReEmpty: false,
+            phoneNumEmpty: false,
+            emailNameEmpty: false,
+            regFail: false,
+            loginFail: false,
+            loginSuccess: false,
+            loginErr: false,
+            logining: false,
+            //账号找回
+            verifyUserName: '',
+            verifyIdentity: '',
+            verifing: false,
+            verifySucess: false,
+            verifyPassword: '',
+            verifyPasswordRe: '',
+            verifyUpdating: false,
+            timer: "",
+            content: "",
+            hour: 0,
+            minutes: 0,
+            seconds: 0,
+            is_start: 1,
+        },
+        methods: {
+            start_ks(){
+              this.is_start = 0;
+            },
+            startTimer() {
+                this.seconds += 1;
+                if (this.seconds >= 60) {
+                    this.seconds = 0;
+                    this.minute = this.minute + 1;
+                }
+
+                if (this.minute >= 60) {
+                    this.minute = 0;
+                    this.hour = this.hour + 1;
+                }
+                this.$refs.startTimer.innerHTML = (this.minutes < 10 ? '0' + this.minutes : this.minutes) + ':' + (this.seconds < 10 ? '0' + this.seconds : this.seconds);
+            },
+            priceFilterRes: function (a, b) {
+                return this.shopInfoBak.filter(function (item) {
+                    return item.singlePrice < b && item.singlePrice > a
+                })
+            },
+            priceFilter: function (item) {
+                for (let i = 0; i < this.filterList.length; i++) {
+                    this.filterList[i].isSelected = false
+                }
+                item.isSelected = true
+                this.shopInfo = this.priceFilterRes(item.rangeA, item.rangeB)
+            },
+            sidouble: function (config) {
+                const instance = axios.create({
+                    baseURL: "http://localhost:8080",
+                });
+
+                return instance(config);
+            },
+            search: function () {
+                if (this.searchContent) {
+                    this.sidouble('/shop/selectByAddress?address=' + this.searchContent).then(res => {
+                        if (res.data.data) {
+                            this.shopInfo = res.data.data
+                        }
+                    })
+                }
+            },
+            //写cookies
+            setCookie: function (cname, cvalue, exminites) {
+                let d = new Date();
+                d.setTime(d.getTime() + (exminites * 60 * 1000));
+                let expires = "expires=" + d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            },
+            //读取cookies
+            getCookie: function (cname) {
+                let name = cname + "=";
+                var decodedCookie = decodeURIComponent(document.cookie);
+                var ca = decodedCookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) === ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) === 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            },
+            change_tab: function () {
+                this.isActive = !this.isActive
+            },
+            login: function () {
+                if (this.loginUserName === '' || this.loginPassword === '') {
+                    return
+                }
+                this.loginSuccess = false
+                this.loginFail = false
+                this.loginErr = false
+                this.logining = true
+                this.sidouble('/login?card_id=' + this.loginUserName + '&user_name=' + this.loginPassword).then(res => {
+                    // console.log(res)
+                    if (res.data.data.id) {
+                        this.loginSuccess = true
+                        this.setCookie('userId', res.data.data.id, 10)
+                        this.setCookie('userRole', res.data.data.role)
+                        this.setCookie('userInfo', JSON.stringify(res.data.data), 10)
+                        location.reload()
+                    } else {
+                        this.loginFail = true
+                    }
+                    this.logining = false
+                }).catch(err => {
+                    this.loginErr = true
+                    this.logining = false
+                    console.log(err)
+                });
+            },
+            register: function () {
+                this.reging = true
+                // console.log(this.regUserName)
+                // console.log(this.regPassword)
+                // console.log(this.regPhoneNum)
+                // console.log(this.regEmail)
+                if (this.regUserName === '') {
+                    this.reSetStatus()
+                    this.userNameEmpty = true
+                    this.reging = false
+                    return
+                }
+                if (this.regPassword === '') {
+                    this.reSetStatus()
+                    this.passwordEmpty = true
+                    this.reging = false
+                    return
+                }
+                if (this.regPasswordRe === '') {
+                    this.reSetStatus()
+                    this.passwordReEmpty = true
+                    this.reging = false
+                    return
+                }
+                if (this.regPhoneNum === '') {
+                    this.reSetStatus()
+                    this.phoneNumEmpty = true
+                    this.reging = false
+                    return
+                }
+                if (this.regEmail === '') {
+                    this.reSetStatus()
+                    this.emailNameEmpty = true
+                    this.reging = false
+                    return
+                }
+                if (this.regPassword === this.regPasswordRe) {
+                    this.sidouble('/user/isExist?name=' + this.regUserName).then(res => {
+                        if (res.data.data) {
+                            this.userNameExist = true
+                            this.reging = false
+                        } else {
+                            this.sidouble({
+                                method: 'post',
+                                url: '/user/register',
+                                data: {
+                                    userName: this.regUserName,
+                                    password: this.regPassword,
+                                    email: this.regEmail,
+                                    phone: this.regPhoneNum
+                                }
+                            }).then(regRes => {
+                                // console.log(regRes)
+                                if (regRes.data.data) {
+                                    this.regSucesss = true
+                                } else {
+                                    this.regFail = true
+                                }
+                                this.reging = false
+                            }).catch(err => {
+                                console.log(err)
+                                this.reging = false
+                            })
+                        }
+                    }).catch(err => {
+                        this.reging = false
+                        console.log(err)
+                    })
+                } else {
+                    this.passwordMatch = true
+                    this.reging = false
+                }
+            },
+            reSetStatus: function () {
+                this.userNameExist = false
+                this.passwordMatch = false
+                this.reging = false
+                this.regSucesss = false
+                this.regErr = false
+                this.userNameEmpty = false
+                this.passwordEmpty = false
+                this.passwordReEmpty = false
+                this.phoneNumEmpty = false
+                this.emailNameEmpty = false
+                this.regErr = false
+            },
+            forgetPwd: function () {
+                this.verifySucess = false
+                $('#forgetPwd').modal('show')
+                $('#loginBox').modal('hide')
+            },
+            verifyAcct: function () {
+                if (this.verifyUserName === '') {
+                    alert('用户名不能为空');
+                    return
+                }
+                if (this.verifyIdentity === '') {
+                    alert('身份证号不能为空');
+                    return
+                }
+                this.verifing = true
+                this.sidouble('/user/modifyPasswordAble?identityNumber=' + this.verifyIdentity + '&userName=' + this.verifyUserName).then(res => {
+                    // console.log(res)
+                    if (res.data.data) {
+                        alert('验证成功！')
+                        this.verifySucess = true
+                    }
+                    this.verifing = false
+                }).catch(err => {
+                    this.verifing = false
+                })
+            },
+            verifyUpdate: function () {
+                if (this.verifyPassword === '' || this.verifyPasswordRe === '') {
+                    alert('密码不能为空');
+                    return
+                }
+                if (this.verifyPassword !== this.verifyPasswordRe) {
+                    alert('两次密码输入不一致');
+                    return
+                }
+                this.verifyUpdating = true
+                this.sidouble({
+                    method: 'post',
+                    url: '/user/updatePassword',
+                    params: {
+                        name: this.verifyUserName,
+                        password: this.verifyPassword,
+                    }
+                }).then(res => {
+                    // console.log(res)
+                    if (res.data.data) {
+                        alert('密码修改成功！')
+                        location.reload()
+                    }
+                    this.verifyUpdating = false
+                }).catch(err => {
+                    console.log(err)
+                    this.verifyUpdating = false
+                })
+            }
+        },
+        created: function () {
+            this.timer = setInterval(this.startTimer, 1000);
+            let userInfo = this.getCookie('userInfo')
+            if (userInfo) {
+                userInfo = JSON.parse(userInfo)
+                this.userInfo = userInfo
+                this.logged = true
+            }
+        }
+    }).$mount('#app')
+</script>
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .shop-img {
+        width: 300px;
+        background: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588494670014&di=4ed65191bc17c06c999a5901b7da900a&imgtype=0&src=http%3A%2F%2Fimage.finance.china.cn%2Fupload%2Fimages%2F2013%2F1126%2F094600%2F0_2000630_3d2135c8e79d65727e90b8fed2368148.jpg") center center no-repeat;
+        background-size: cover
+    }
+
+    .head-img {
+        background: url("https://images.pexels.com/photos/731082/pexels-photo-731082.jpeg?cs=srgb&dl=pexels-731082.jpg&fm=jpg") center center no-repeat;
+        background-size: cover
+    }
+
+    .nav-link {
+        color: grey;
+    }
+
+    .active {
+        font-weight: bold;
+        color: #0069d9;
+    }
+
+    .selected {
+        color: #1E9FFF;
+    }
+
+    /*登录表单样式*/
+    .form-signin {
+        width: 100%;
+        max-width: 420px;
+        padding: 15px;
+        margin: auto;
+    }
+
+    .form-label-group {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .form-label-group > input,
+    .form-label-group > label {
+        height: 3.125rem;
+        padding: .75rem;
+    }
+
+    .form-label-group > label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        width: 100%;
+        margin-bottom: 0; /* Override default `<label>` margin */
+        line-height: 1.5;
+        color: #495057;
+        pointer-events: none;
+        cursor: text; /* Match the input under the label */
+        border: 1px solid transparent;
+        border-radius: .25rem;
+        transition: all .1s ease-in-out;
+    }
+
+    .form-label-group input::-webkit-input-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input:-ms-input-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input::-ms-input-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input::-moz-placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input::placeholder {
+        color: transparent;
+    }
+
+    .form-label-group input:not(:placeholder-shown) {
+        padding-top: 1.25rem;
+        padding-bottom: .25rem;
+    }
+
+    .form-label-group input:not(:placeholder-shown) ~ label {
+        padding-top: .25rem;
+        padding-bottom: .25rem;
+        font-size: 12px;
+        color: #777;
+    }
+
+    /* Fallback for Edge
+    -------------------------------------------------- */
+    @supports (-ms-ime-align: auto) {
+        .form-label-group > label {
+            display: none;
+        }
+
+        .form-label-group input::-ms-input-placeholder {
+            color: #777;
+        }
+    }
+
+    /* Fallback for IE
+    -------------------------------------------------- */
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        .form-label-group > label {
+            display: none;
+        }
+
+        .form-label-group input:-ms-input-placeholder {
+            color: #777;
+        }
+    }
+
+    footer {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    footer p {
+        margin-bottom: .25rem;
+    }
+</style>

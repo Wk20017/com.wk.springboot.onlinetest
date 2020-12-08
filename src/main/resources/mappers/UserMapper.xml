@@ -3,28 +3,28 @@
 
 <mapper namespace="com.wk.springboot.dao.UserDao">
     <resultMap id="AnswerMap" type="com.wk.springboot.vo.Answer">
-        <result column="test_id" property="test_id"></result>
-        <result column="answer" property="answer"></result>
+        <result column="test_id" property="testId"/>
+        <result column="answer" property="answer"/>
     </resultMap>
 
     <select id="queryUserByUserId" resultType="com.wk.springboot.vo.User">
-        select user_name from user where card_id = #{card_id}
+        select user_name from user where card_id = #{cardId}
     </select>
 
     <update id="update_join" parameterType="com.wk.springboot.vo.User">
-        update user set is_join = 1 where card_id = #{card_id}
+        update user set is_join = 1 where card_id = #{cardId}
     </update>
     <update id="update_time" parameterType="com.wk.springboot.vo.User">
-        update user set use_time = #{time} where card_id = #{card_id}
+        update user set use_time = #{time} where card_id = #{cardId}
     </update>
-    <update id="update_grade" parameterType="com.wk.springboot.vo.User">
-        update user set grade = #{grade} where card_id = #{card_id}
+    <update id="update_grade">
+        update user set grade = #{myGrade} where card_id = #{cardId}
     </update>
-    <update id="update_grade" parameterType="com.wk.springboot.vo.User">
-        update user set right_count = #{grade} where card_id = #{card_id}
+    <update id="update_count">
+        update user set right_count = #{myCount} where card_id = #{cardId}
     </update>
     <delete id="deleteUser" parameterType="com.wk.springboot.vo.User">
-        delete from user where card_id = #{card_id}
+        delete from user where card_id = #{cardId}
     </delete>
 
     <select id="queryAnswer" resultMap="AnswerMap">

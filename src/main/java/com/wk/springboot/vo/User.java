@@ -5,56 +5,53 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 //import javax.validation.constraints.NotBlank;
 
 public class User {
-//    @NotBlank(message = "校园卡号不能为空！")
-    private String card_id;
-//    @NotBlank(message = "姓名不能为空！")
-    private String user_name;
-    private Integer company_id;
-//    @NotBlank(message = "单位名称不能为空！")
-    private String company_name;
-    private Integer is_join;
+    private String cardId;
+    private String userName;
+    private Integer companyId;
+    private String companyName;
+    private Integer isJoin;
     private double grade;
-    private Integer right_count;
+    private Integer rightCount;
     private Integer time;
 
-    public String getCard_id() {
-        return card_id;
+    public String getCardId() {
+        return cardId;
     }
 
-    public void setCard_id(String card_id) {
-        this.card_id = card_id;
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
     }
 
-    public String getName() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.user_name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public Integer getCompany_id() {
-        return company_id;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(Integer company_id) {
-        this.company_id = company_id;
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 
-    public String getCompany_name() {
-        return company_name;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany_name(String company_name) {
-        this.company_name = company_name;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
-    public Integer getIs_join() {
-        return is_join;
+    public Integer getIsJoin() {
+        return isJoin;
     }
 
-    public void setIs_join(Integer is_join) {
-        this.is_join = is_join;
+    public void setIsJoin(Integer isJoin) {
+        this.isJoin = isJoin;
     }
 
     public double getGrade() {
@@ -65,12 +62,12 @@ public class User {
         this.grade = grade;
     }
 
-    public Integer getRight_count() {
-        return right_count;
+    public Integer getRightCount() {
+        return rightCount;
     }
 
-    public void setRight_count(Integer right_count) {
-        this.right_count = right_count;
+    public void setRightCount(Integer rightCount) {
+        this.rightCount = rightCount;
     }
 
     public Integer getTime() {

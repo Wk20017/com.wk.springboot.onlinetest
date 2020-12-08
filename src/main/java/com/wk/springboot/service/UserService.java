@@ -25,16 +25,18 @@ public class UserService {
         userDao.update_time(user);
     }
 
-    public void update_grade(User user, Integer grade){
-        userDao.update_grade(user, grade);
+    public void update_grade(String cardId, double grade){
+        userDao.update_grade(cardId, grade);
     }
 
-    public void update_count(User user, Integer right_count){
-        userDao.update_count(user, right_count);
+    public void update_count(String cardId, Integer right_count){
+        userDao.update_count(cardId, right_count);
     }
-    public void deleteUser(String card_id){
-         userDao.deleteUser(card_id);
-    }
+
+
+//    public void deleteUser(String card_id){
+//         userDao.deleteUser(card_id);
+//    }
 
     //answer
     public List<Answer> queryAnswer(){
