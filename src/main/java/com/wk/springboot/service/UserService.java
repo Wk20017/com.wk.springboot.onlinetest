@@ -13,8 +13,8 @@ public class UserService {
     @Autowired(required = false)
     private UserDao userDao;
 
-    public User queryUserByUserId(String card_id){
-        return userDao.queryUserByUserId(card_id);
+    public User queryUserByUserId(String cardId){
+        return userDao.queryUserByUserId(cardId);
     }
 
     public void update_join(User user){
@@ -29,8 +29,8 @@ public class UserService {
         userDao.update_grade(cardId, grade);
     }
 
-    public void update_count(String cardId, Integer right_count){
-        userDao.update_count(cardId, right_count);
+    public void update_count(String cardId, Integer rightCount){
+        userDao.update_count(cardId, rightCount);
     }
 
 

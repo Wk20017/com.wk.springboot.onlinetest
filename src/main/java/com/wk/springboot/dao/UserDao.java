@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UserDao {
 
-    User queryUserByUserId(@Param("card_id") String card_id);
+    User queryUserByUserId(@Param("cardId") String cardId);
 
 //    void deleteUser(String card_id);
 

@@ -24,7 +24,7 @@ mybatis:
   type-aliases-package: com.wk.springboot.vo
   configuration:
     #下划线转驼峰
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: false
 #pageHelper
 pagehelper:
   helper-dialect: mysql

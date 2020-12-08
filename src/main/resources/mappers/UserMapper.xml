@@ -7,24 +7,35 @@
         <result column="answer" property="answer"/>
     </resultMap>
 
-    <select id="queryUserByUserId" resultType="com.wk.springboot.vo.User">
-        select user_name from user where card_id = #{cardId}
+    <resultMap id="UserMap" type="com.wk.springboot.vo.User">
+        <result column="cardId" property="cardId"/>
+        <result column="user_name" property="userName"/>
+        <result column="company_id" property="companyId"/>
+        <result column="company_name" property="companyName"/>
+        <result column="is_join" property="isJoin"/>
+        <result column="grade" property="grade"/>
+        <result column="right_count" property="rightCount"/>
+        <result column="use_time" property="time"/>
+    </resultMap>
+
+    <select id="queryUserByUserId" resultMap="UserMap">
+        select * from user where cardId = #{cardId}
     </select>
 
     <update id="update_join" parameterType="com.wk.springboot.vo.User">
-        update user set is_join = 1 where card_id = #{cardId}
+        update user set is_join = 1 where cardId = #{cardId}
     </update>
     <update id="update_time" parameterType="com.wk.springboot.vo.User">
-        update user set use_time = #{time} where card_id = #{cardId}
+        update user set use_time = #{time} where cardId = #{cardId}
     </update>
     <update id="update_grade">
-        update user set grade = #{myGrade} where card_id = #{cardId}
+        update user set grade = #{myGrade} where cardId = #{cardId}
     </update>
     <update id="update_count">
-        update user set right_count = #{myCount} where card_id = #{cardId}
+        update user set right_count = #{myCount} where cardId = #{cardId}
     </update>
     <delete id="deleteUser" parameterType="com.wk.springboot.vo.User">
-        delete from user where card_id = #{cardId}
+        delete from user where cardId = #{cardId}
     </delete>
 
     <select id="queryAnswer" resultMap="AnswerMap">

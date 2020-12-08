@@ -1,14 +1,26 @@
 package com.wk.springboot.model;
 
-public class Msg {
-    private Integer code;
-    private String msg;
+import lombok.Data;
 
-    public Integer getCode() {
+@Data
+public class Msg {
+    private String code;
+    private String msg;
+    private Object object;
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
+
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

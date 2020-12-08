@@ -2,6 +2,8 @@ package com.wk.springboot.vo;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.List;
+
 //import javax.validation.constraints.NotBlank;
 
 public class User {
@@ -13,6 +15,16 @@ public class User {
     private double grade;
     private Integer rightCount;
     private Integer time;
+
+    private List<String> t;
+
+    public List<String> getT() {
+        return t;
+    }
+
+    public void setT(List<String> t) {
+        this.t = t;
+    }
 
     public String getCardId() {
         return cardId;
