@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>商铺信息</title>
+    <title>网上知识竞答</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -11,9 +11,12 @@
 <body>
 <div id="app">
     <div class="sticky-top d-flex flex-column flex-md-row align-items-center p-3
-            px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">考试</h5>
+            px-md-4 mb-3 bg-white border-bottom shadow-sm" style="background-color: #e3f2fd;">
+        <h5 class="my-0 mr-md-auto font-weight-normal">党的十九届五中全会精神暨廉政文化知识网上竞答
+        </h5>
         <form class="form-inline my-2 my-lg-0 mr-5">
+            <a class="nav-link" href="#">返回顶部</a>
+            <button type="button" class="btn btn-info ml-1 mr-4" @click="kssubmit">提交</button>
             <div class="input-group timer">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">计时</span>
@@ -23,25 +26,27 @@
                 </div>
             </div>
         </form>
-        <a v-cloak v-if="logged" class="text-primary" href="#">{{cardId}} - {{userName}}</a>
+        <a v-cloak v-if="logged" class="text-primary" href="#" @click="logout">{{cardId}} - {{userName}}</a>
         <!--        <button v-cloak v-if="logged" class="btn btn-danger mr-1 ml-1">登出</button>-->
-        <a v-else class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#loginBox">登录/注册</a>
+        <a v-else class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#loginBox">登录</a>
     </div>
     <div class="container mt-10" id="con1" v-if="is_start">
-        <button type="button" class="btn btn-primary btn-lg btn-block" @click="start_ks">START KAOS</button>
+        <div class="jumbotron p-4 p-md-5 text-black rounded bg-dark head-img">
+            <div class="">
+                <h5 class="display-4 font-italic"><small>党的十九届五中全会精神暨廉政文化知识网上竞答</small>
+                </h5>
+                <p class="lead my-3"><strong>竞赛规则：<br>
+                    1.答题以党支部为单位进行，由全体党员干部参加。<br>
+                    2.题目设置为单选及多选题混合的形式。<br>
+                    3.答题方法，点击右上角登录按钮，填入个人信息，点击开始按钮后，即可作答。<br>
+                    4.每人仅一次答题机会，完成所有题目后点击右上角提交按钮。<br>
+                    5.答题结束后，以答题参与率、准确率、个人获奖率确定优胜党支部8个，并在参与答题的党员干部中，按准确率、提交答案的最短时间，确定个人优胜奖50名，给予表彰奖励。
+                </strong></p>
+            </div>
+        </div>
+        <button type="button" class="btn btn-danger btn-lg btn-block" @click="start_ks">开始答题</button>
     </div>
     <div class="container mt-10" id="con2" v-else>
-
-        <!--        <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark head-img">-->
-        <!--            <div class="col-md-6 px-0">-->
-        <!--                <h1 class="display-4 font-italic">道路千万条，安全第一条。</h1>-->
-        <!--                <p class="lead my-3">特朗普：我想不通为什么。我想不通，真的。-->
-        <!--                    记者：那你会负责吗？-->
-        <!--                    特朗普：不，我不会。我想不通为什么。</p>-->
-        <!--                <p class="lead mb-0"><a href="#" class="text-white-->
-        <!--                            font-weight-bold">查看详情...</a></p>-->
-        <!--            </div>-->
-        <!--        </div>-->
 
         <div class="btn-toolbar mb-1" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -111,13 +116,15 @@
             <div class="row">
                 <div class="col-sm-10">
                     <legend class="col-form-label ">
-                        <h4><span v-if="item.type == 'multiple'">（多选题）</span>{{item.content}}</h4>
+                        <h4>{{item.id + '. '}}<span v-if="item.type == 'multiple'">（多选题）</span>{{item.content}}</h4>
                     </legend>
                     <div class="form-check pt-4" v-for="(answer,index) in item.answers">
                         <input v-if="item.type == 'single'" class="form-check-input" type="radio" :name="'t_' + item.id"
-                               :id="item.id + index" value="option1">
+                               :id="item.id + '_' + index" :value="item.id + '_' + index"
+                               @click="pickAnswer(index, $event)">
                         <input v-else-if="item.type == 'multiple'" class="form-check-input" type="checkbox"
-                               :name="'t_' + item.id" :id="item.id + index" value="option1">
+                               :name="'t_' + item.id" :id="item.id + '_' + index" :value="item.id + '_' + index"
+                               @click="pickAnswer(index, $event)" v-model="mul_picked">
                         <label class="form-check-label" :for="item.id + index">
                             {{answer}}
                         </label>
@@ -135,8 +142,8 @@
                     <h5><a class="nav-link" :class="{active: isActive}" @click="change_tab"
                            href="#">登录</a></h5>
 
-                    <h5><a class="nav-link" :class="{active: !isActive}" @click="change_tab"
-                           href="#">注册</a></h5>
+                    <!--                    <h5><a class="nav-link" :class="{active: !isActive}" @click="change_tab"-->
+                    <!--                           href="#">注册</a></h5>-->
 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -146,16 +153,16 @@
                     <form class="form-signin">
 
                         <div class="form-label-group">
-                            <input type="text" id="loginUserName" class="form-control" placeholder="卡号"
+                            <input type="text" id="loginUserName" class="form-control" placeholder="校园卡卡号"
                                    required
                                    autofocus v-model="loginUserName">
-                            <label for="loginUserName">卡号</label>
+                            <label for="loginUserName">校园卡卡号</label>
                         </div>
 
                         <div class="form-label-group">
-                            <input type="text" id="loginPassword" class="form-control" placeholder="用户名"
+                            <input type="text" id="loginPassword" class="form-control" placeholder="姓名"
                                    required v-model="loginPassword">
-                            <label for="loginPassword">用户名</label>
+                            <label for="loginPassword">姓名</label>
                         </div>
 
                         <!--                        <div class="form-group">-->
@@ -227,73 +234,15 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="forgetPwd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">账号找回</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form class="form-signin" v-if="verifySucess">
-
-                        <div class="form-label-group">
-                            <input type="password" id="verifyPassword" class="form-control" placeholder="新的密码" required
-                                   v-model="verifyPassword">
-                            <label for="verifyPassword">新的密码</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="password" id="verifyPasswordRe" class="form-control" placeholder="再次输入密码"
-                                   required
-                                   v-model="verifyPasswordRe">
-                            <label for="verifyPasswordRe">再次输入密码</label>
-                        </div>
-
-                        <button class="btn btn-lg btn-success btn-block" @click="verifyUpdate"
-                                type="button">
-                            <span v-if="verifyUpdating" class="spinner-border spinner-border" role="status"
-                                  aria-hidden="true"></span>
-                            <div v-else>提交</div>
-                        </button>
-                    </form>
-                    <form class="form-signin" v-else>
-
-                        <div class="form-label-group">
-                            <input type="text" id="verifyUserName" class="form-control" placeholder="用户名/电话号码/邮箱"
-                                   required
-                                   autofocus v-model="verifyUserName">
-                            <label for="verifyUserName">用户名/电话号码/邮箱</label>
-                        </div>
-
-                        <div class="form-label-group">
-                            <input type="text" id="verifyIdentity" class="form-control" placeholder="身份证号" required
-                                   v-model="verifyIdentity">
-                            <label for="verifyIdentity">身份证号</label>
-                        </div>
-
-                        <button class="btn btn-lg btn-secondary btn-block" @click="verifyAcct"
-                                type="button">
-                            <span v-if="verifing" class="spinner-border spinner-border" role="status"
-                                  aria-hidden="true"></span>
-                            <div v-else>验证</div>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <footer class="text-muted mt-5 fixed-bottom">
-        <div class="container">
-            <p class="float-right">
-                <a href="#">返回顶部</a>
-            </p>
-<!--            <p> &copy; ks</p>-->
-        </div>
-    </footer>
+    <!--    <footer class="text-muted mt-5 fixed-bottom" style="background-color: white">-->
+    <!--        <div class="container">-->
+    <!--            <p class="float-right">-->
+    <!--                <a href="#">返回顶部</a>-->
+    <!--                <button type="button" class="btn btn-info ml-2">提交</button>-->
+    <!--            </p>-->
+    <!--            &lt;!&ndash;            <p> &copy; ks</p>&ndash;&gt;-->
+    <!--        </div>-->
+    <!--    </footer>-->
 </div>
 
 </body>
@@ -316,247 +265,247 @@
                 {
                     type: 'single',
                     id: '1',
-                    content: '1.党的十九届五中全会召开时间是▁。',
+                    content: '党的十九届五中全会召开时间是▁。',
                     answers: ['A.2020年9月26日至29日', 'B.2020年8月26日至29日', 'C.2020年10月26日至29日', 'D.2020年6月26日至29日']
                 },
                 {
                     type: 'single',
                     id: '2',
-                    content: '2.党的十九届五中全会通过了中共中央关于▁规划和     ▁年远景目标的建议。',
+                    content: '党的十九届五中全会通过了中共中央关于▁规划和     ▁年远景目标的建议。',
                     answers: ['A.“十四五” 2025', 'B.“十四五” 2035', 'C.“十三五” 2035', 'D.“十四五” 2050']
                 },
                 {
                     type: 'single',
                     id: '3',
-                    content: '3.“十四五”时期是指▁年到▁年。',
+                    content: '“十四五”时期是指▁年到▁年。',
                     answers: ['A.2021  2025', 'B.2020  2024', 'C.2021  2035', 'D.2020  2025']
                 },
                 {
                     type: 'multiple',
                     id: '4',
-                    content: '4.实现“十四五”规划和2035年远景目标，必须▁。',
+                    content: '实现“十四五”规划和2035年远景目标，必须▁。',
                     answers: ['A.坚持党的全面领导', 'B.充分调动一切积极因素', 'C.广泛团结一切可以团结的力量', 'D.形成推动发展的强大合力']
                 },
                 {
                     type: 'multiple',
                     id: '5',
-                    content: '5.我们党提出的两个100年奋斗目标分别是▁。',
+                    content: '我们党提出的两个100年奋斗目标分别是▁。',
                     answers: ['A.到中国共产党成立100年时，全面建成小康社会', 'B.到中国共产党成立100年时，基本实现小康社会', 'C.到新中国成立100年时，建成富强民主文明和谐的社会主义现代化国家', 'D.到新中国成立100年时，全面建成小康社会']
                 },
                 {
                     type: 'multiple',
                     id: '6',
-                    content: '6.党的十九届五中全会中提出的“四个全面”战略布局新表述是▁。',
+                    content: '党的十九届五中全会中提出的“四个全面”战略布局新表述是▁。',
                     answers: ['A.全面建设社会主义现代化国家', 'B.全面深化改革', 'C.全面依法治国', 'D.全面从严治党']
                 },
                 {
                     type: 'single',
                     id: '7',
-                    content: '7.党的十九届五中全会认为，我国发展仍然处于重要▁，但机遇和挑战都有新的发展变化。',
+                    content: '党的十九届五中全会认为，我国发展仍然处于重要▁，但机遇和挑战都有新的发展变化。',
                     answers: ['A.战略平台期', 'B.战略攻坚期', 'C.快速发展期', 'D.战略机遇期']
                 },
                 {
                     type: 'multiple',
                     id: '8',
-                    content: '8.党的十九届五中全会指出，加快构建以▁为主体，▁    相互促进的新发展格局。',
+                    content: '党的十九届五中全会指出，加快构建以▁为主体，▁    相互促进的新发展格局。',
                     answers: ['A.国内大循环', 'B.国际大循环', 'C.国内国际双循环', 'D.国内国际大循环']
                 },
                 {
                     type: 'single',
                     id: '9',
-                    content: '9.党的十九届五中全会指出,我国已转向▁发展阶段。',
+                    content: '党的十九届五中全会指出,我国已转向▁发展阶段。',
                     answers: ['A.高消耗', 'B.高强度', 'C.高质量', 'D.高速度']
                 },
                 {
                     type: 'single',
                     id: '10',
-                    content: '10.“十四五”规划建议中提出,推进以▁为核心的新型城镇化。',
+                    content: '“十四五”规划建议中提出,推进以▁为核心的新型城镇化。',
                     answers: ['A.自然', 'B.城市', 'C.人', 'D.环境保护']
                 },
                 {
                     type: 'single',
                     id: '11',
-                    content: '11.我国要坚持把解决好三农问题作为全党工作重中之重,全面实施▁。',
+                    content: '我国要坚持把解决好三农问题作为全党工作重中之重,全面实施▁。',
                     answers: ['A.乡村振兴 ', 'B.精准扶贫', 'C.美丽乡村', 'D.农业现代化']
                 },
                 {
                     type: 'single',
                     id: '12',
-                    content: '12.我国已建成世界上规模最大的社会保障体系,基本医疗保险覆盖超过▁人，基本养老保险覆盖近▁人。',
+                    content: '我国已建成世界上规模最大的社会保障体系,基本医疗保险覆盖超过▁人，基本养老保险覆盖近▁人。',
                     answers: ['A.5亿,7亿', 'B.7亿,5亿', 'C.10亿、13亿', 'D.13亿、10亿']
                 },
                 {
                     type: 'single',
                     id: '13',
-                    content: '13.十四五规划建议中指出，坚持扩大▁这个战略基点，加快培育完整内需体系，把实施扩大内需战略同深化供给侧结构性改革有机结合起来，以创新驱动高质量供给引领和创造新需求。',
+                    content: '十四五规划建议中指出，坚持扩大▁这个战略基点，加快培育完整内需体系，把实施扩大内需战略同深化供给侧结构性改革有机结合起来，以创新驱动高质量供给引领和创造新需求。',
                     answers: ['A.消费', 'B.投资', 'C.出口', 'D.内需']
                 },
                 {
                     type: 'multiple',
                     id: '14',
-                    content: '14.我国要坚持把发展经济着力点放在实体经济上，坚定不移建设▁。',
+                    content: '我国要坚持把发展经济着力点放在实体经济上，坚定不移建设▁。',
                     answers: ['A.制造强国', 'B.质量强国', 'C.网络强国', 'D.数字中国']
                 },
                 {
                     type: 'multiple',
                     id: '15',
-                    content: '15.“十四五”规划建议指出，要贯彻▁方针，深化人才发展体制机制改革，全方位培养、引进、用好人才，造就更多国际一流的科技领军人才和创新团队，培养具有国际竞争力的青年科技人才后备军。',
+                    content: '“十四五”规划建议指出，要贯彻▁方针，深化人才发展体制机制改革，全方位培养、引进、用好人才，造就更多国际一流的科技领军人才和创新团队，培养具有国际竞争力的青年科技人才后备军。',
                     answers: ['A.尊重劳动 ', 'B.尊重知识', 'C.尊重人才', 'D.尊重创造']
                 },
                 {
                     type: 'multiple',
                     id: '16',
-                    content: '16.我国要构建高水平社会主义市场经济体制，推动▁     和▁更好结合。',
+                    content: '我国要构建高水平社会主义市场经济体制，推动▁     和▁更好结合。',
                     answers: ['A.有效市场', 'B.全面市场', 'C.有为政府', 'D.强力政府']
                 },
                 {
                     type: 'multiple',
                     id: '17',
-                    content: '17.党的十九届五中全会指出，当今世界正经历百年未有之大变局，新一轮▁深入发展。',
+                    content: '党的十九届五中全会指出，当今世界正经历百年未有之大变局，新一轮▁深入发展。',
                     answers: ['A.科技革命', 'B.产业革命', 'C.工业革命', 'D.商业革命']
                 },
                 {
                     type: 'multiple',
                     id: '18',
-                    content: '18.“十四五”规划建议中提出，要提高高等教育质量。分类建设一流大学和一流学科，加快培养▁类专业紧缺人才，提高民族地区教育质量和水平，加大国家通用语言文字推广力度。',
+                    content: '“十四五”规划建议中提出，要提高高等教育质量。分类建设一流大学和一流学科，加快培养▁类专业紧缺人才，提高民族地区教育质量和水平，加大国家通用语言文字推广力度。',
                     answers: ['A.理学 ', 'B.工学', 'C.农学', 'D.医学']
                 },
                 {
                     type: 'multiple',
                     id: '19',
-                    content: '19.“十四五”规划建议中提出。坚持实施▁对外开放，预托过大市场优势，促进国际合作，实现互利共赢。',
+                    content: '“十四五”规划建议中提出。坚持实施▁对外开放，预托过大市场优势，促进国际合作，实现互利共赢。',
                     answers: ['A.更无差别', 'B.更大范围', 'C.更宽领域', 'D.更深层次']
                 },
                 {
                     type: 'single',
                     id: '20',
-                    content: '20.我国要坚持以▁引领文化建设。',
+                    content: '我国要坚持以▁引领文化建设。',
                     answers: ['A.社会主义核心价值观', 'B.社会主义思想道德建设', 'C.社会主义现代化建设', 'D.中国优秀传统文化']
                 },
                 {
                     type: 'single',
                     id: '21',
-                    content: '21.党的十九届五中全会认为，我国发展仍然处于重要▁，但机遇和挑战都有新的发展变化。',
+                    content: '党的十九届五中全会认为，我国发展仍然处于重要▁，但机遇和挑战都有新的发展变化。',
                     answers: ['A.战略平台期', 'B.战略攻坚期', 'C.快速发展期', 'D.战略机遇期']
                 },
                 {
                     type: 'multiple',
                     id: '22',
-                    content: '22.党内监督必须把纪律挺在前面，运用监督执纪“四种形态”。“四种形态”指的是▁。',
+                    content: '党内监督必须把纪律挺在前面，运用监督执纪“四种形态”。“四种形态”指的是▁。',
                     answers: ['A.经常开展批评和自我批评、约谈函询，让“红红脸、出出汗”成为常态', 'B.党纪轻处分、组织调整成为违纪处理的大多数', 'C.党纪重处分、重大职务调整的成为少数', 'D.严重违纪涉嫌违法立案审查的成为极少数']
                 },
                 {
                     type: 'multiple',
                     id: '23',
-                    content: '23.对党员的纪律处分种类有▁。',
+                    content: '对党员的纪律处分种类有▁。',
                     answers: ['A.警告', 'B.严重警告', 'C.撤销党内职务', 'D.留党察看', 'E.开除党籍']
                 },
                 {
                     type: 'single',
                     id: '24',
-                    content: '24.党员受到警告处分▁、受到严重警告处分▁，不得在党内提升职务和向党外组织推荐担任高于其原任职务的党外职务。',
+                    content: '党员受到警告处分▁、受到严重警告处分▁，不得在党内提升职务和向党外组织推荐担任高于其原任职务的党外职务。',
                     answers: ['A.半年内  一年内', 'B.一年内  一年半内', 'C.一年内  两年内', 'D.半年内  两年内']
                 },
                 {
                     type: 'single',
                     id: '25',
-                    content: '25.党员受到开除党籍处分，___内不得重新入党， 也不得推荐担任与其原任职务相当或者高于其原任职务的党外职务。',
+                    content: '党员受到开除党籍处分，___内不得重新入党， 也不得推荐担任与其原任职务相当或者高于其原任职务的党外职务。',
                     answers: ['A.两年', 'B.三年', 'C.四年', 'D.五年']
                 },
                 {
                     type: 'single',
                     id: '26',
-                    content: '26.在重大原则问题上不同党中央保持一致且有实际言论、行为或者造成不良后果的,给予▁处分 ；情节较重的,给予▁处分；情节严重的,给予▁处分。',
+                    content: '在重大原则问题上不同党中央保持一致且有实际言论、行为或者造成不良后果的,给予▁处分 ；情节较重的,给予▁处分；情节严重的,给予▁处分。',
                     answers: ['A.警告、严重警告、撤销党内职务', 'B.严重警告、撤销党内职务、留党察看', 'C.严重警告或者撤销党内职务、留党察看、开除党籍', 'D.警告或者严重警告、撤销党内职务或者留党察看、开除党籍']
                 },
                 {
                     type: 'single',
                     id: '27',
-                    content: '27.通过网络、广播、电视、报刊、传单、书籍等，或者利用讲座、论坛、报告会、座谈会等方式，公开发表坚持资产阶级自由化立场、反对四项基本原则,反对党的改革开放决策的文章、演说、宣言、声明等的,给予▁处分。',
+                    content: '通过网络、广播、电视、报刊、传单、书籍等，或者利用讲座、论坛、报告会、座谈会等方式，公开发表坚持资产阶级自由化立场、反对四项基本原则,反对党的改革开放决策的文章、演说、宣言、声明等的,给予▁处分。',
                     answers: ['A.警告', 'B.严重警告', 'C.留党察看', 'D.开除党籍']
                 },
                 {
                     type: 'single',
                     id: '28',
-                    content: '28.党员领导干部在本人主政的地方或者分管的部门自行其是，搞山头主义，拒不执行党中央确定的大政方针，甚至背着党中央另搞一套的,给予▁处分。',
+                    content: '党员领导干部在本人主政的地方或者分管的部门自行其是，搞山头主义，拒不执行党中央确定的大政方针，甚至背着党中央另搞一套的,给予▁处分。',
                     answers: ['A.撤销党内职务、留党察看或者开除党籍', 'B.撤销党内职务、留党察看', 'C.留党察看', 'D.开除党籍']
                 },
                 {
                     type: 'single',
                     id: '29',
-                    content: '29.落实党中央决策部署不坚决,打折扣、搞变通,在政治上造成不良影响或者严重后果的,给予警告或者严重警告处分；情节严重的,给予▁处分。',
+                    content: '落实党中央决策部署不坚决,打折扣、搞变通,在政治上造成不良影响或者严重后果的,给予警告或者严重警告处分；情节严重的,给予▁处分。',
                     answers: ['A.开除党籍', 'B.留党察看', 'C.撤销党内职务、留党察看或者开除党籍处分', 'D.撤销党内职务、留党察看']
                 },
                 {
                     type: 'single',
                     id: '30',
-                    content: '30.对党不忠诚不老实,表里不一，阳奉阴违，欺上瞒下，搞两面派，做两面人，情节较轻的，给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的,给予▁处分。',
+                    content: '对党不忠诚不老实,表里不一，阳奉阴违，欺上瞒下，搞两面派，做两面人，情节较轻的，给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的,给予▁处分。',
                     answers: ['A.严重警告', 'B.撤销党内职务', 'C.留党察看', 'D.开除党籍']
                 },
                 {
                     type: 'single',
                     id: '31',
-                    content: '31.制造、散布、传播政治谣言,破坏党的团结统一的，给予警告或者严重警告处分；情节较重的,给予▁处分；情节严重的，给予开除党籍处分。',
+                    content: '制造、散布、传播政治谣言,破坏党的团结统一的，给予警告或者严重警告处分；情节较重的,给予▁处分；情节严重的，给予开除党籍处分。',
                     answers: ['A.严重警告', 'B.严重警告或者撤销党内职务', 'C.开除党籍', 'D.撤销党内职务或者留党察看']
                 },
                 {
                     type: 'single',
                     id: '32',
-                    content: '32.不按照有关规定向组织请示、报告重大事项,情节较重的，给予警告或者严重警告处分；情节严重的,给予▁处分。',
+                    content: '不按照有关规定向组织请示、报告重大事项,情节较重的，给予警告或者严重警告处分；情节严重的,给予▁处分。',
                     answers: ['A.撤销党内职务或者留党察看', 'B.严重警告或者撤销党内职务', 'C.留党察看或开除党籍']
                 },
                 {
                     type: 'single',
                     id: '33',
-                    content: '33.干扰巡视巡察工作或者不落实巡视巡察整改要求，情节较轻的，给予警告或者严重警告处分；情节较重的，给予▁处分；情节严重的，给予开除党籍处分。',
+                    content: '干扰巡视巡察工作或者不落实巡视巡察整改要求，情节较轻的，给予警告或者严重警告处分；情节较重的，给予▁处分；情节严重的，给予开除党籍处分。',
                     answers: ['A.严重警告或者留党察看', 'B.严重警告或者撤销党内职务', 'C.撤销党内职务或者留党察看', 'D.留党察看或者开除党籍']
                 },
                 {
                     type: 'single',
                     id: '34',
-                    content: '34.对信仰宗教的党员，应当加强思想教育，经党组织帮助教育仍没有转变的，应当▁；劝而不退的，予以▁；参与利用宗教搞煽动活动的，给予开除党籍处分。',
+                    content: '对信仰宗教的党员，应当加强思想教育，经党组织帮助教育仍没有转变的，应当▁；劝而不退的，予以▁；参与利用宗教搞煽动活动的，给予开除党籍处分。',
                     answers: ['A.劝其退党  勒令退党', 'B.劝其退党  除名', 'C.勒令退党  除名', 'D.除名  开除党籍']
                 },
                 {
                     type: 'single',
                     id: '35',
-                    content: '35.党员领导干部对违反政治纪律和政治规矩等错误思想和行为不报告、不抵制、不斗争，放任不管,搞无原则一团和气，造成不良影响的，给予警告或者严重警告处分；情节严重的,给予▁处分。',
+                    content: '党员领导干部对违反政治纪律和政治规矩等错误思想和行为不报告、不抵制、不斗争，放任不管,搞无原则一团和气，造成不良影响的，给予警告或者严重警告处分；情节严重的,给予▁处分。',
                     answers: ['A.严重警告或者撤销党内职务', 'B.严重警告或者留党察看', 'C.撤销党内职务或者留党察看', 'D.留党察看或者开除党籍']
                 },
                 {
                     type: 'multiple',
                     id: '36',
-                    content: '36.有下列行为之一的,给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的，给予开除党籍处分。',
+                    content: '有下列行为之一的,给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的，给予开除党籍处分。',
                     answers: ['A.在民主推荐、民主测评、组织考察和党内选举中搞拉票、助选等非组织活动的', 'B.在法律规定的投票、选举活动中违背组织原则搞非组织活动，组织、怂恿、诱使他人投票、表决的', 'C.在选举中进行其他违反党章、其他党内法规和有关章程活动的']
                 },
                 {
                     type: 'single',
                     id: '37',
-                    content: '37.收受可能影响公正执行公务的礼品、礼金、消费卡和▁等财物，情节较轻的，给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的，给予开除党籍处分。',
+                    content: '收受可能影响公正执行公务的礼品、礼金、消费卡和▁等财物，情节较轻的，给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的，给予开除党籍处分。',
                     answers: ['A.有价证券、股权、其他金融产品 ', 'B.汽车、房产', 'C.电脑、汽车、房产', 'D.有价证券、债券、其他金融产品']
                 },
                 {
                     type: 'single',
                     id: '38',
-                    content: '38.利用职权或者职务上的影响，违反有关规定占用公物归个人使用,时间超过▁,情节较重的，给予警告或者严重警告处分；情节严重的，给予撤销党内职务处分。',
+                    content: '利用职权或者职务上的影响，违反有关规定占用公物归个人使用,时间超过▁,情节较重的，给予警告或者严重警告处分；情节严重的，给予撤销党内职务处分。',
                     answers: ['A.一个月', 'B.三个月', 'C.六个月', 'D.一年']
                 },
                 {
                     type: 'multiple',
                     id: '39',
-                    content: '39.有下列行为之一,对直接责任者和领导责任者,情节较重的,给予警告或者严重警告处分；情节严重的,给予撤销党内职务或者留党察看处分。',
+                    content: '有下列行为之一,对直接责任者和领导责任者,情节较重的,给予警告或者严重警告处分；情节严重的,给予撤销党内职务或者留党察看处分。',
                     answers: ['A.对涉及群众生产、生活等切身利益的问题依照政策或者有关规定能解决而不及时解决，庸懒无为、效率低下，造成不良影响的', 'B.对符合政策的群众诉求消极应付、推诿扯皮，损害党群、干群关系的', 'C.对待群众态度恶劣、简单粗暴，造成不良影响的', 'D.弄虚作假，欺上瞒下,损害群众利益的', 'E.有其他不作为、乱作为等损害群众利益行为的']
                 },
                 {
                     type: 'multiple',
                     id: '40',
-                    content: '40.有下列行为之一的，造成严重不良影响,对直接责任者和领导责任者,情节较轻的，给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的，给予开除党籍处分。',
+                    content: '有下列行为之一的，造成严重不良影响,对直接责任者和领导责任者,情节较轻的，给予警告或者严重警告处分；情节较重的，给予撤销党内职务或者留党察看处分；情节严重的，给予开除党籍处分。',
                     answers: ['A.贯彻党中央决策部署只表态不落实的', 'B.热衷于搞舆论造势、浮在表面的', 'C.单纯以会议贯彻会议、以文件落实文件，在实际工作中不见诸行动的', 'D.工作中有其他形式主义、官僚主义行为的']
                 },
                 {
                     type: 'single',
                     id: '41',
-                    content: '41.在考试、录取工作中,有泄露试题、考场舞弊、涂改考卷、违规录取等违反有关规定行为的,给予警告或者严重警告处分；情节较重的,给予▁处分 ；情节严重的，给予开除党籍处分。',
+                    content: '在考试、录取工作中,有泄露试题、考场舞弊、涂改考卷、违规录取等违反有关规定行为的,给予警告或者严重警告处分；情节较重的,给予▁处分 ；情节严重的，给予开除党籍处分。',
                     answers: ['A.严重警告或者留党察看', 'B.严重警告或者撤销党内职务', 'C.撤销党内职务或者留党察看', 'D.留党察看或者开除党籍']
                 },
                 {
@@ -568,49 +517,49 @@
                 {
                     type: 'single',
                     id: '43',
-                    content: '43.党员领导干部不重视家风建设，对配偶、子女及其配偶失管失教,造成不良影响或者严重后果的，给予警告或者严重警告处分；情节严重的,给予▁处分。',
+                    content: '党员领导干部不重视家风建设，对配偶、子女及其配偶失管失教,造成不良影响或者严重后果的，给予警告或者严重警告处分；情节严重的,给予▁处分。',
                     answers: ['A.严重警告', 'B.撤销党内职务', 'C.留党察看', 'D.开除党籍']
                 },
                 {
                     type: 'multiple',
                     id: '44',
-                    content: '44.党章规定，党的纪律主要包括▁、工作纪律、生活纪律。',
+                    content: '党章规定，党的纪律主要包括▁、工作纪律、生活纪律。',
                     answers: ['A.政治纪律 ', 'B.组织纪律', 'C.廉洁纪律', 'D.群众纪律', 'E.财经纪律']
                 },
                 {
                     type: 'multiple',
                     id: '45',
-                    content: '45.违反公务接待管理规定,▁、▁接待或者借机大吃大喝，对直接责任者和领导责任者，情节较重的，给予警告或者严重警告处分；情节严重的，给予撤销党内职务处分。',
+                    content: '违反公务接待管理规定,▁、▁接待或者借机大吃大喝，对直接责任者和领导责任者，情节较重的，给予警告或者严重警告处分；情节严重的，给予撤销党内职务处分。',
                     answers: ['A.超人数', 'B.超标准 ', 'C.超范围', 'D.超时间']
                 },
                 {
                     type: 'multiple',
                     id: '46',
-                    content: '46.生活奢靡、贪图享乐、追求低级趣味，造成不良影响的，给予▁或▁处分；情节严重的，给予撤销党内职务处分。',
+                    content: '生活奢靡、贪图享乐、追求低级趣味，造成不良影响的，给予▁或▁处分；情节严重的，给予撤销党内职务处分。',
                     answers: ['A.警告 ', 'B.严重警告', 'C.撤销党内职务', 'D.开除党籍']
                 },
                 {
                     type: 'multiple',
                     id: '47',
-                    content: '47.党员廉洁自律规范的内容包括▁。',
+                    content: '党员廉洁自律规范的内容包括▁。',
                     answers: ['A.坚持公私分明，先公后私，克己奉公', 'B.坚持崇廉拒腐，清白做人，干净做事', 'C.坚持尚俭戒奢，艰苦朴素，勤俭节约', 'D.坚持吃苦在前，享受在后，甘于奉献']
                 },
                 {
                     type: 'multiple',
                     id: '48',
-                    content: '48.党员领导干部廉洁自律规范的内容包括▁。',
+                    content: '党员领导干部廉洁自律规范的内容包括▁。',
                     answers: ['A.廉洁从政，自觉保持人民公仆本色', 'B.廉洁用权，自觉维护人民根本利益', 'C.廉洁修身，自觉提升思想道德境界', 'D.廉洁齐家，自觉带头树立良好家风']
                 },
                 {
                     type: 'multiple',
                     id: '49',
-                    content: '49.习近平指出，我们要抓好道德建设，教育引导广大党员、干部模范践行社会主义荣辱观，树立良好道德风尚，争做▁、▁、▁，始终保持共产党人的高尚品格和廉洁操守。',
+                    content: '习近平指出，我们要抓好道德建设，教育引导广大党员、干部模范践行社会主义荣辱观，树立良好道德风尚，争做▁、▁、▁，始终保持共产党人的高尚品格和廉洁操守。',
                     answers: ['A.诚信风尚的引领者', 'B.社会主义道德的示范者', 'C.党章党规的践行者 ', 'D.公平正义的维护者']
                 },
                 {
                     type: 'single',
                     id: '50',
-                    content: '50.坚持反腐败无禁区、全覆盖、零容忍，坚定不移“打虎”、“拍蝇”、“猎狐”，▁的目标初步实现，▁的笼子越扎越牢，▁的堤坝正在构筑，反腐败斗争压倒性态势已经形成并巩固发展。',
+                    content: '坚持反腐败无禁区、全覆盖、零容忍，坚定不移“打虎”、“拍蝇”、“猎狐”，▁的目标初步实现，▁的笼子越扎越牢，▁的堤坝正在构筑，反腐败斗争压倒性态势已经形成并巩固发展。',
                     answers: ['A.不敢腐 不能腐 不想腐', 'B.不能腐 不敢腐 不想腐', 'C.不想腐 不敢腐 不能腐', 'D.不敢腐 不想腐 不能腐']
                 }
             ],
@@ -619,14 +568,6 @@
             shopInfoBak: [],
             userInfo: [],
             logged: false,
-            searchContent: '',
-            filterList: [
-                {name: '不限', isSelected: true, rangeA: 0, rangeB: 9999},
-                {name: '30万以下', isSelected: false, rangeA: 0, rangeB: 30},
-                {name: '30-50万', isSelected: false, rangeA: 30, rangeB: 50},
-                {name: '50-80万', isSelected: false, rangeA: 50, rangeB: 80},
-                {name: '80-120万', isSelected: false, rangeA: 80, rangeB: 120},
-            ],
             //登录注册
             isActive: true,
             loginUserName: '',
@@ -667,9 +608,101 @@
             is_start: 1,
             cardId: '',
             userName: '',
-            msg: ''
+            msg: '',
+            sig_picked: {},
+            mul_picked: [],
+            picked: [],
+            choice: ['A', 'B', 'C', 'D', 'E', 'F']
         },
         methods: {
+            logout() {
+                alert('登出！')
+                this.setCookie('userInfo', JSON.stringify({
+                    cardId: '',
+                    userName: '',
+                    minutes: '',
+                    seconds: ''
+                }), 1)
+                location.reload()
+            },
+            answer_trans() {
+                this.picked = []
+                let sig_temp = JSON.parse(JSON.stringify(this.sig_picked))
+                for (let item in sig_temp) {
+                    let res = sig_temp[item]
+                    let ss = res.split('_')
+                    this.picked[ss[0] - 1] = this.choice[ss[1]]
+                }
+                this.mul_picked.sort()
+                for (let item in this.mul_picked) {
+                    let ss = this.mul_picked[item].split('_')
+                    // console.log(this.picked[ss[0] - 1])
+                    if (this.picked[ss[0] - 1] === undefined) {
+                        this.picked[ss[0] - 1] = this.choice[ss[1]]
+                    } else {
+                        this.picked[ss[0] - 1] = this.picked[ss[0] - 1].concat(this.choice[ss[1]])
+                    }
+                }
+                // console.log(this.picked)
+            },
+            answer_check() {
+                for (let i = 0; i < 50; i++) {
+                    if (this.picked[i] === undefined) {
+                        alert('第' + (i + 1) + '题未选择答案')
+                        return false
+                    }
+                }
+                return true
+            },
+            kssubmit() {
+                if (!this.logged) {
+                    alert('请先登录！')
+                    return false
+                }
+                this.answer_trans()
+                if (!this.answer_check()) {
+                    return false
+                }
+                console.log('开始提交...')
+                let userInfo = this.getCookie('userInfo')
+                userInfo = JSON.parse(userInfo)
+                console.log('cardId: ' + userInfo.cardId)
+                console.log('time: ' + (userInfo.minutes * 60 + userInfo.seconds))
+                console.log('t: ' + this.picked)
+                this.sidouble({
+                    method: 'post',
+                    url: '/user',
+                    dataType: 'json',
+                    data: {
+                        cardId: userInfo.cardId,
+                        t: this.picked,
+                        isJoin: '1',
+                        time: userInfo.minutes * 60 + userInfo.seconds
+                    }
+                }).then(res => {
+                    console.log(res)
+                    if (res.data.code === '200') {
+                        alert('提交成功！')
+                    } else if (res.data.code === '-2') {
+                        alert('不能重复提交！')
+                    }
+                    console.log('提交结束...')
+                }).catch(err => {
+                    alert('提交失败！')
+                    console.log(err)
+                    console.log('提交结束...')
+                })
+            },
+            pickAnswer(index, event) {
+                let el = event.currentTarget
+                // console.log(index)
+                // console.log(el)
+                if (el.getAttribute('type') === 'radio') {
+                    this.$set(this.sig_picked, el.getAttribute('name'), el.getAttribute('value'))
+                }
+                // console.log(this.sig_picked)
+                // console.log(this.mul_picked)
+            },
             start_ks() {
                 if (this.logged) {
                     this.is_start = 0;
@@ -690,12 +723,16 @@
                     this.minutes = 0;
                     this.hour = this.hour + 1;
                 }
-                this.setCookie('userInfo', JSON.stringify({
-                    cardId: this.loginUserName,
-                    userName: this.loginPassword,
-                    minutes: this.minutes,
-                    seconds: this.seconds
-                }), 10)
+                if (this.logged) {
+                    let userInfo = this.getCookie('userInfo')
+                    userInfo = JSON.parse(userInfo)
+                    this.setCookie('userInfo', JSON.stringify({
+                        cardId: userInfo.cardId,
+                        userName: userInfo.userName,
+                        minutes: this.minutes,
+                        seconds: this.seconds
+                    }), 10)
+                }
                 this.$refs.startTimer.innerHTML = (this.minutes < 10 ? '0' + this.minutes : this.minutes) + ':' + (this.seconds < 10 ? '0' + this.seconds : this.seconds);
             },
             priceFilterRes: function (a, b) {
@@ -753,15 +790,10 @@
                 this.isActive = !this.isActive
             },
             login: function () {
-                // this.setCookie('userInfo', JSON.stringify({
-                //     cardId: '1',
-                //     userName: '1',
-                //     minutes: this.minutes,
-                //     seconds: this.seconds
-                // }), 10)
                 if (this.loginUserName === '' || this.loginPassword === '') {
                     return
                 }
+                console.log('开始登录...')
                 this.loginSuccess = false
                 this.loginFail = false
                 this.loginErr = false
@@ -791,79 +823,6 @@
                     this.logining = false
                     console.log(err)
                 });
-            },
-            register: function () {
-                this.reging = true
-                // console.log(this.regUserName)
-                // console.log(this.regPassword)
-                // console.log(this.regPhoneNum)
-                // console.log(this.regEmail)
-                if (this.regUserName === '') {
-                    this.reSetStatus()
-                    this.userNameEmpty = true
-                    this.reging = false
-                    return
-                }
-                if (this.regPassword === '') {
-                    this.reSetStatus()
-                    this.passwordEmpty = true
-                    this.reging = false
-                    return
-                }
-                if (this.regPasswordRe === '') {
-                    this.reSetStatus()
-                    this.passwordReEmpty = true
-                    this.reging = false
-                    return
-                }
-                if (this.regPhoneNum === '') {
-                    this.reSetStatus()
-                    this.phoneNumEmpty = true
-                    this.reging = false
-                    return
-                }
-                if (this.regEmail === '') {
-                    this.reSetStatus()
-                    this.emailNameEmpty = true
-                    this.reging = false
-                    return
-                }
-                if (this.regPassword === this.regPasswordRe) {
-                    this.sidouble('/user/isExist?name=' + this.regUserName).then(res => {
-                        if (res.data.data) {
-                            this.userNameExist = true
-                            this.reging = false
-                        } else {
-                            this.sidouble({
-                                method: 'post',
-                                url: '/user/register',
-                                data: {
-                                    userName: this.regUserName,
-                                    password: this.regPassword,
-                                    email: this.regEmail,
-                                    phone: this.regPhoneNum
-                                }
-                            }).then(regRes => {
-                                // console.log(regRes)
-                                if (regRes.data.data) {
-                                    this.regSucesss = true
-                                } else {
-                                    this.regFail = true
-                                }
-                                this.reging = false
-                            }).catch(err => {
-                                console.log(err)
-                                this.reging = false
-                            })
-                        }
-                    }).catch(err => {
-                        this.reging = false
-                        console.log(err)
-                    })
-                } else {
-                    this.passwordMatch = true
-                    this.reging = false
-                }
             },
             reSetStatus: function () {
                 this.userNameExist = false
@@ -935,6 +894,7 @@
             }
         },
         created: function () {
+            this.logged = false
             // this.timer = setInterval(this.startTimer, 1000);
             let userInfo = this.getCookie('userInfo')
             if (userInfo) {
@@ -949,15 +909,6 @@
                 }
             }
         }
-        // ,
-        // mounted: function () {
-        //     this.setCookie('userInfo', JSON.stringify({
-        //         cardId: '1',
-        //         userName: '1',
-        //         minutes: this.minutes,
-        //         seconds: this.seconds
-        //     }))
-        // }
     }).$mount('#app')
 </script>
 
@@ -966,14 +917,14 @@
         display: none;
     }
 
-    .shop-img {
-        width: 300px;
-        background: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588494670014&di=4ed65191bc17c06c999a5901b7da900a&imgtype=0&src=http%3A%2F%2Fimage.finance.china.cn%2Fupload%2Fimages%2F2013%2F1126%2F094600%2F0_2000630_3d2135c8e79d65727e90b8fed2368148.jpg") center center no-repeat;
-        background-size: cover
-    }
+    /*.shop-img {*/
+    /*    width: 300px;*/
+    /*    background: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1588494670014&di=4ed65191bc17c06c999a5901b7da900a&imgtype=0&src=http%3A%2F%2Fimage.finance.china.cn%2Fupload%2Fimages%2F2013%2F1126%2F094600%2F0_2000630_3d2135c8e79d65727e90b8fed2368148.jpg") center center no-repeat;*/
+    /*    background-size: cover*/
+    /*}*/
 
     .head-img {
-        background: url("https://images.pexels.com/photos/731082/pexels-photo-731082.jpeg?cs=srgb&dl=pexels-731082.jpg&fm=jpg") center center no-repeat;
+        background: url("http://bpic.588ku.com/back_pic/05/54/27/235b044cd9a2b90.jpg!/fh/300/quality/90/unsharp/true/compress/true") center center no-repeat;
         background-size: cover
     }
 

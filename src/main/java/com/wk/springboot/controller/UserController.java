@@ -54,7 +54,13 @@ public class UserController {
 
     @PostMapping("/user")
     @ResponseBody
-    public void update_user(@RequestBody User user) {
+    public Msg update_user(@RequestBody User user) {
+        Msg msg = new Msg();
+        if(userService.queryUserByUserId(user.getCardId()).getIsJoin()==1){
+            msg.setCode("-2");
+            msg.setMsg("已经提交过");
+            return msg;
+        }
         //更新是否参加和用时
         userService.update_join(user);
         userService.update_time(user);
@@ -77,6 +83,9 @@ public class UserController {
         //更新分数和正确数量
         userService.update_count(user.getCardId(), count);
         userService.update_grade(user.getCardId(), grade);
+        msg.setCode("200");
+        msg.setMsg("更新成功");
+        return msg;
     }
 
 }
