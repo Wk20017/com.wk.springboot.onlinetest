@@ -21,7 +21,7 @@ public class UserController {
         return userService.queryUserByUserId(cardId);
     }
 
-    @RequestMapping("/mylogin")
+    @RequestMapping("/")
     public String index(Model model) {
         return "login";
     }
@@ -84,7 +84,7 @@ public class UserController {
         userService.update_count(user.getCardId(), count);
         userService.update_grade(user.getCardId(), grade);
         msg.setCode("200");
-        msg.setMsg("更新成功");
+        msg.setMsg(""+grade);
         return msg;
     }
 

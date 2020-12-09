@@ -682,7 +682,8 @@
                 }).then(res => {
                     console.log(res)
                     if (res.data.code === '200') {
-                        alert('提交成功！')
+                        alert('分数： ' + res.data.msg)
+                        this.logout()
                     } else if (res.data.code === '-2') {
                         alert('不能重复提交！')
                     }
@@ -749,7 +750,7 @@
             },
             sidouble: function (config) {
                 const instance = axios.create({
-                    baseURL: "http://localhost:8080",
+                    baseURL: "http://dtxt.lzu.edu.cn",
                 });
 
                 return instance(config);
