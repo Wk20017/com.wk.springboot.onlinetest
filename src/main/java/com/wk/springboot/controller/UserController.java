@@ -32,6 +32,7 @@ public class UserController {
         User user1 = userService.queryUserByUserId(cardId);
 //        System.out.println(card_id + user_name);
         Msg msg = new Msg();
+        System.out.println(userName+"请求登录..");
         if (user1 == null || !user1.getUserName().equals(userName)) {
             //输入错误，请重新输入
             System.out.println("no");
