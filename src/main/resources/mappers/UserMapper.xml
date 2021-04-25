@@ -23,7 +23,7 @@
     </select>
 
     <update id="update_join" parameterType="com.wk.springboot.vo.User">
-        update user set is_join = 1 where cardId = #{cardId}
+        update user set is_join = is_join + 1 where cardId = #{cardId}
     </update>
     <update id="update_time" parameterType="com.wk.springboot.vo.User">
         update user set use_time = #{time} where cardId = #{cardId}
@@ -40,5 +40,14 @@
 
     <select id="queryAnswer" resultMap="AnswerMap">
         select * from answer
+    </select>
+
+    <insert id="addUser">
+        insert into user (cardId, user_name, company_id, company_name, is_join, right_count, use_time, grade)
+        values (#{cardId}, #{userName}, 1, "test", 0, 0, 0, 0)
+    </insert>
+
+    <select id="getLastGrade" resultType="Double">
+        select grade from user where cardId = #{cardId}
     </select>
 </mapper>

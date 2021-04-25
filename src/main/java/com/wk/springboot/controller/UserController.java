@@ -30,6 +30,10 @@ public class UserController {
     @ResponseBody
     public Msg login(String cardId, String userName) {
         User user1 = userService.queryUserByUserId(cardId);
+        if (user1 == null){
+            userService.addUser(cardId, userName);
+            user1 = userService.queryUserByUserId(cardId);
+        }
 //        System.out.println(card_id + user_name);
         Msg msg = new Msg();
         System.out.println(userName+"请求登录..");
@@ -39,10 +43,10 @@ public class UserController {
             msg.setCode("-1");
             msg.setMsg("验证失败");
             return msg;
-        } else if (user1.getIsJoin() == 1) {
+        } else if (user1.getIsJoin() == 2) {
             System.out.println("No");
             msg.setCode("-1");
-            msg.setMsg("已经答过");
+            msg.setMsg("两次机会已用完！");
             return msg;
         } else {
             //跳转到答题界面
@@ -57,14 +61,11 @@ public class UserController {
     @ResponseBody
     public Msg update_user(@RequestBody User user) {
         Msg msg = new Msg();
-        if(userService.queryUserByUserId(user.getCardId()).getIsJoin()==1){
+        if(userService.queryUserByUserId(user.getCardId()).getIsJoin()==2){
             msg.setCode("-2");
-            msg.setMsg("已经提交过");
+            msg.setMsg("两次机会已用完！");
             return msg;
         }
-        //更新是否参加和用时
-        userService.update_join(user);
-        userService.update_time(user);
 
         //查询成绩表，计算并统计分数
         List<Answer> answer = userService.queryAnswer();
@@ -82,10 +83,29 @@ public class UserController {
             //判断用户输入与正确答案是否相同，相同count++, grade+相应分数;
         }
         //更新分数和正确数量
-        userService.update_count(user.getCardId(), count);
-        userService.update_grade(user.getCardId(), grade);
-        msg.setCode("200");
-        msg.setMsg(""+grade);
+        try {
+            if(userService.queryUserByUserId(user.getCardId()).getIsJoin()==1){
+                double last_grade = userService.getLastGrade(user.getCardId());
+                System.out.println("last:" + last_grade);
+                System.out.println("grade:" + grade);
+                if (last_grade < grade){
+                    userService.update_count(user.getCardId(), count);
+                    userService.update_grade(user.getCardId(), grade);
+                    userService.update_time(user);
+                }
+            } else {
+                userService.update_count(user.getCardId(), count);
+                userService.update_grade(user.getCardId(), grade);
+                userService.update_time(user);
+            }
+            userService.update_join(user);
+            msg.setCode("200");
+            msg.setMsg(""+grade);
+        } catch (Exception e){
+            e.printStackTrace();
+            msg.setCode("400");
+            msg.setMsg("wrong");
+        }
         return msg;
     }
 

@@ -19,6 +19,8 @@ public interface UserDao {
     int update_count(String cardId, Integer myCount);
     int update_time(User user);
 
+    double getLastGrade(@Param("cardId") String cardId);
+    void addUser(@Param("cardId") String cardId, @Param("userName") String userName);
 
     List<Answer> queryAnswer();
 }

@@ -21,6 +21,10 @@ public class UserService {
         userDao.update_join(user);
     }
 
+    public double getLastGrade(String cardId){
+        return userDao.getLastGrade(cardId);
+    }
+
     public void update_time(User user){
         userDao.update_time(user);
     }
@@ -33,6 +37,13 @@ public class UserService {
         userDao.update_count(cardId, rightCount);
     }
 
+    public void addUser(String cardId, String userName){
+        try {
+            userDao.addUser(cardId, userName);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 //    public void deleteUser(String card_id){
 //         userDao.deleteUser(card_id);
