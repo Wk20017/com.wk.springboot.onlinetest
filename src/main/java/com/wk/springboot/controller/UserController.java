@@ -29,6 +29,7 @@ public class UserController {
     @GetMapping("/login")
     @ResponseBody
     public Msg login(String cardId, String userName, String companyName) {
+        System.out.println("companyName:" + companyName);
         User user1 = userService.queryUserByUserId(cardId);
         if (user1 == null){
             userService.addUser(cardId, userName, companyName);

@@ -163,14 +163,14 @@
                                    required v-model="loginPassword">
                             <label for="loginPassword">姓名</label>
                         </div>
-                        <label>所属公司</label>
+                        <label>请选择所属党组织</label>
                         <div class="form-label-group">
                             <!--                            <select class="form-control form-control-lg" v-model="myGroup" >-->
                             <!--                                <option></option>-->
                             <!--                            </select>-->
 
                             <select class="form-control form-control-lg" v-model="myGroup">
-                                <option v-for="(item,index) in group" :value=item.id>{{item}}
+                                <option v-for="(item,index) in group">{{item}}
                                 </option>
                             </select>
                         </div>
@@ -834,6 +834,7 @@
                     return
                 }
                 console.log('开始登录...')
+                console.log(this.myGroup)
                 this.loginSuccess = false
                 this.loginFail = false
                 this.loginErr = false
