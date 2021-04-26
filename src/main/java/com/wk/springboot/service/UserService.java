@@ -37,9 +37,9 @@ public class UserService {
         userDao.update_count(cardId, rightCount);
     }
 
-    public void addUser(String cardId, String userName){
+    public void addUser(String cardId, String userName, String companyName){
         try {
-            userDao.addUser(cardId, userName);
+            userDao.addUser(cardId, userName, companyName);
         } catch (Exception e){
             e.printStackTrace();
         }

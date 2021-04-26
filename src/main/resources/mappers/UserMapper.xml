@@ -44,7 +44,7 @@
 
     <insert id="addUser">
         insert into user (cardId, user_name, company_id, company_name, is_join, right_count, use_time, grade)
-        values (#{cardId}, #{userName}, 1, "test", 0, 0, 0, 0)
+        values (#{cardId}, #{userName}, 1, #{companyName}, 0, 0, 0, 0)
     </insert>
 
     <select id="getLastGrade" resultType="Double">

@@ -28,10 +28,10 @@ public class UserController {
 
     @GetMapping("/login")
     @ResponseBody
-    public Msg login(String cardId, String userName) {
+    public Msg login(String cardId, String userName, String companyName) {
         User user1 = userService.queryUserByUserId(cardId);
         if (user1 == null){
-            userService.addUser(cardId, userName);
+            userService.addUser(cardId, userName, companyName);
             user1 = userService.queryUserByUserId(cardId);
         }
 //        System.out.println(card_id + user_name);

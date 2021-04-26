@@ -20,7 +20,7 @@ public interface UserDao {
     int update_time(User user);
 
     double getLastGrade(@Param("cardId") String cardId);
-    void addUser(@Param("cardId") String cardId, @Param("userName") String userName);
+    void addUser(@Param("cardId") String cardId, @Param("userName") String userName, @Param("companyName") String companyName);
 
     List<Answer> queryAnswer();
 }

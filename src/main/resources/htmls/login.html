@@ -16,7 +16,7 @@
         </h5>
         <form class="form-inline my-2 my-lg-0 mr-5">
             <a class="nav-link" href="#">返回顶部</a>
-            <button type="button" class="btn btn-primary ml-1 mr-4" @click="kssubmit">提交</button>
+            <button type="button" class="btn btn-primary ml-1 mr-4" @click="kssubmit" :disabled="isSubmit">提交</button>
             <div class="input-group timer">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">计时</span>
@@ -163,13 +163,24 @@
                                    required v-model="loginPassword">
                             <label for="loginPassword">姓名</label>
                         </div>
+                        <label>所属公司</label>
+                        <div class="form-label-group">
+                            <!--                            <select class="form-control form-control-lg" v-model="myGroup" >-->
+                            <!--                                <option></option>-->
+                            <!--                            </select>-->
+
+                            <select class="form-control form-control-lg" v-model="myGroup">
+                                <option v-for="(item,index) in group" :value=item.id>{{item}}
+                                </option>
+                            </select>
+                        </div>
 
                         <!--                        <div class="form-group">-->
                         <!--                            <div><a href="#" @click="forgetPwd">忘记密码？ 找回账号</a></div>-->
                         <!--                        </div>-->
 
-                        <button class="btn btn-lg btn-primary btn-block" @click="login" :disabled="reging"
-                                type="button">
+                        <button class="btn btn-lg btn-primary btn-block" :disabled="reging"
+                                type="button" data-toggle="modal" data-target="#exampleModal">
                             <span v-if="logining" class="spinner-border spinner-border" role="status"
                                   aria-hidden="true"></span>
                             <div v-else>登录</div>
@@ -242,6 +253,26 @@
     <!--            &lt;!&ndash;            <p> &copy; ks</p>&ndash;&gt;-->
     <!--        </div>-->
     <!--    </footer>-->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" @click="login" >确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
@@ -611,7 +642,10 @@
             sig_picked: {},
             mul_picked: [],
             picked: [],
-            choice: ['A', 'B', 'C', 'D', 'E', 'F']
+            choice: ['A', 'B', 'C', 'D', 'E', 'F'],
+            isSubmit: true,
+            myGroup: '1',
+            group: [1, 2, 3, 4, 5]
         },
         methods: {
             logout() {
@@ -668,6 +702,7 @@
                 console.log('cardId: ' + userInfo.cardId)
                 console.log('time: ' + (userInfo.minutes * 60 + userInfo.seconds))
                 console.log('t: ' + this.picked)
+                this.isSubmit = true
                 this.sidouble({
                     method: 'post',
                     url: '/user',
@@ -687,7 +722,9 @@
                         alert('不能重复提交！')
                     }
                     console.log('提交结束...')
+                    this.isSubmit = false
                 }).catch(err => {
+                    this.isSubmit = false
                     alert('提交失败！')
                     console.log(err)
                     console.log('提交结束...')
@@ -707,6 +744,8 @@
                 if (this.logged) {
                     this.is_start = 0;
                     this.timer = setInterval(this.startTimer, 1000);
+                    this.isSubmit = false
+                    console.log(this.isSubmit)
                 } else {
                     alert("请先登录！");
                 }
@@ -791,7 +830,7 @@
                 this.isActive = !this.isActive
             },
             login: function () {
-                if (this.loginUserName === '' || this.loginPassword === '') {
+                if (this.loginUserName === '' || this.loginPassword === '' || this.myGroup === '') {
                     return
                 }
                 console.log('开始登录...')
@@ -799,17 +838,19 @@
                 this.loginFail = false
                 this.loginErr = false
                 this.logining = true
-                this.sidouble('/login?cardId=' + this.loginUserName + '&userName=' + this.loginPassword).then(res => {
+                this.sidouble('/login?cardId=' + this.loginUserName + '&userName=' + this.loginPassword + '&myGroup=' + this.myGroup).then(res => {
                     console.log(res)
                     if (res.data.code === '200') {
                         this.loginSuccess = true
                         this.cardId = this.loginUserName
                         this.userName = this.loginPassword
+                        this.myGroup = this.myGroup
                         this.minutes = 0
                         this.seconds = 0
                         this.setCookie('userInfo', JSON.stringify({
                             cardId: this.loginUserName,
                             userName: this.loginPassword,
+                            myGroup: this.myGroup,
                             minutes: this.minutes,
                             seconds: this.seconds
                         }), 10)
